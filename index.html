@@ -113,9 +113,9 @@ ol.stops button[aria-current="step"] .n { color: var(--brass); }
 
 <script type="importmap">
 { "imports": {
-  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
-  "three-mesh-bvh": "https://cdn.jsdelivr.net/npm/three-mesh-bvh@0.7.3/build/index.module.js"
+  "three": "./vendor/three/build/three.module.js",
+  "three/addons/": "./vendor/three/examples/jsm/",
+  "three-mesh-bvh": "./vendor/bvh/index.module.js"
 } }
 </script>
 <script type="module">
@@ -123,7 +123,6 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
-import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { computeBoundsTree, acceleratedRaycast } from "three-mesh-bvh";
 THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
 THREE.Mesh.prototype.raycast = acceleratedRaycast;
@@ -226,7 +225,7 @@ function tileTex(base, grout, px = 512, n = 2) {
 
 const groups = {};          // стены/потолок для разреза
 const meshes = [];
-const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+const loader = new GLTFLoader();
 const [gltf, pts] = await Promise.all([
   fetch("kotelnaya.glb.txt").then(r => r.text()).then(b64 => {   // GLB передаётся как base64-текст
     const bin = Uint8Array.from(atob(b64.replace(/\s+/g, "")), c => c.charCodeAt(0));
